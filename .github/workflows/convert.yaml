@@ -1,0 +1,33 @@
+name: Youtube to Text
+
+on:
+  workflow_dispatch:
+    inputs:
+      youtube_link:
+        description: 'YouTube Link'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set environment variable
+      run: echo "YOUTUBE_LINK=${{ github.event.inputs.youtube_link }}" >> $GITHUB_ENV
+
+    - name: Install Python
+      run: |
+        sudo apt-get update
+        sudo apt-get install python3 ffmpeg -y
+        python3 -m pip install --upgrade pip
+        pip3 install pytube
+        pip3 install git+https://github.com/openai/whisper.git -q
+
+    # - name: Install Python dependencies
+    #   run: pip install -r requirements.txt
+
+    - name: Run main.py
+      run: python3 main.py --link "$YOUTUBE_LINK"
