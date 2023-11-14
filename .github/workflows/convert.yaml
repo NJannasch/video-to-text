@@ -30,4 +30,5 @@ jobs:
     #   run: pip install -r requirements.txt
 
     - name: Run main.py
-      run: python3 main.py --link "$YOUTUBE_LINK"
+      run: |
+        python3 main.py --link "$YOUTUBE_LINK" >> $GITHUB_STEP_SUMMARY
